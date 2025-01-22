@@ -23,6 +23,18 @@ public class ProductEntity {
         this.price = price;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     public Long getId() {
         return id;
     }
@@ -34,4 +46,6 @@ public class ProductEntity {
     public Double getPrice() {
         return price;
     }
+
+
 }
