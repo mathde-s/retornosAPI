@@ -81,4 +81,21 @@ public class ProductService {
                 .map(ProductMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    private void validateAndUpdateEntity(ProductEntity existingEntity, Product updatedProduct) {
+        if (!Category.isValidEnum(updatedProduct.category().name())) {
+            throw new IllegalArgumentException("a categoria não é válida");
+        }
+        existingEntity.setName(updatedProduct.name());
+
+        if (updatedProduct.price() < 0) {
+            throw new IllegalArgumentException("o preço não pode ser menor que zero.");
+        }
+        existingEntity.setPrice(updatedProduct.price());
+
+        if (updatedProduct.name().length() < 3 || updatedProduct.name().length() < 100) {
+            throw new IllegalArgumentException("o nome deve conter entre 3 e 100 caracteres");
+        }
+        existingEntity.setCategory(updatedProduct.category());
+    }
 }
