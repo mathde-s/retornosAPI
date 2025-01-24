@@ -9,7 +9,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,9 +34,7 @@ public class ProductService {
 
     public List<Product> getAllProducts() {
         return repository.findAll().stream()
-                .map(entity -> new Product(entity.getId(), entity.getName()
-                        ,entity.getDescription(), entity.getPrice()
-                        , entity.getCategory(), entity.getQuantity()))
+                .map(ProductMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -50,18 +47,14 @@ public class ProductService {
 
     // Atualizar um produto existente
     public Product updateProduct(Long id, Product updatedProduct) {
-        // Verificar se o produto existe
         ProductEntity existingEntity = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product with ID " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("produto com ID " + id + " não encontrado"));
 
-        // Atualizar os dados do produto
+        validateAndUpdateEntity(existingEntity, updatedProduct);
         existingEntity.setName(updatedProduct.name());
         existingEntity.setPrice(updatedProduct.price());
 
-        // Salvar as alterações no banco de dados
         ProductEntity savedEntity = repository.save(existingEntity);
-
-        // Retornar o produto atualizado
         return ProductMapper.toDTO(savedEntity);
     }
 
