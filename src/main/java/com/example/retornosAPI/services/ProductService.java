@@ -21,9 +21,7 @@ public class ProductService {
     public Product createProduct(Product product) {
         ProductEntity entity = ProductMapper.toEntity(product);
         ProductEntity savedEntity = repository.save(entity);
-        return new Product(savedEntity.getId(), savedEntity.getName()
-                ,savedEntity.getDescription(), savedEntity.getPrice()
-                ,savedEntity.getCategory(), savedEntity.getQuantity());
+        return ProductMapper.toDTO(savedEntity);
     }
 
     public Product getProductById(Long id) {
