@@ -17,12 +17,14 @@ public class ProductEntity {
     @Max(value = 500, message = "a descrição não pode ter mais de 500 caracteres")
     private String description;
 
+    @NotNull(message = "O preço é obrigatório.")
     @Positive(message = "O preço deve ser maior que zero.")
     private Double price;
 
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    @NotNull(message = "A quantidade em estoque é obrigatória.")
     @Min(value = 0, message = "A quantidade deve ser igual ou maior que zero.")
     private int quantity;
 
