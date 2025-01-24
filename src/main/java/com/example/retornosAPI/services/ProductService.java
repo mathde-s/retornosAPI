@@ -53,6 +53,7 @@ public class ProductService {
         validateAndUpdateEntity(existingEntity, updatedProduct);
         existingEntity.setName(updatedProduct.name());
         existingEntity.setPrice(updatedProduct.price());
+        existingEntity.setCategory(updatedProduct.category());
 
         ProductEntity savedEntity = repository.save(existingEntity);
         return ProductMapper.toDTO(savedEntity);
@@ -79,16 +80,13 @@ public class ProductService {
         if (!Category.isValidEnum(updatedProduct.category().name())) {
             throw new IllegalArgumentException("a categoria não é válida");
         }
-        existingEntity.setName(updatedProduct.name());
 
         if (updatedProduct.price() < 0) {
             throw new IllegalArgumentException("o preço não pode ser menor que zero.");
         }
-        existingEntity.setPrice(updatedProduct.price());
 
         if (updatedProduct.name().length() < 3 || updatedProduct.name().length() < 100) {
             throw new IllegalArgumentException("o nome deve conter entre 3 e 100 caracteres");
         }
-        existingEntity.setCategory(updatedProduct.category());
     }
 }
