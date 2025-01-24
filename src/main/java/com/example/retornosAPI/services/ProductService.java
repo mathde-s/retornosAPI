@@ -59,9 +59,7 @@ public class ProductService {
         ProductEntity savedEntity = repository.save(existingEntity);
 
         // Retornar o produto atualizado
-        return new Product(savedEntity.getId(), savedEntity.getName()
-                ,savedEntity.getDescription(), savedEntity.getPrice()
-                ,savedEntity.getCategory(), savedEntity.getQuantity());
+        return ProductMapper.toDTO(savedEntity);
     }
 
     // Buscar produtos pelo nome
@@ -77,9 +75,7 @@ public class ProductService {
             System.out.println("Produtos encontrados com o nome '" + name + "': " + entities.size());
         }
         return entities.stream()
-                .map(entity -> new Product(entity.getId(), entity.getName()
-                        ,entity.getDescription(), entity.getPrice()
-                        , entity.getCategory(), entity.getQuantity()))
+                .map(ProductMapper::toDTO)
                 .collect(Collectors.toList());
     }
 }
