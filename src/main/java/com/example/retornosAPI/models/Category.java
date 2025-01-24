@@ -4,5 +4,13 @@ public enum Category {
     ELETRONICO,
     ROUPA,
     ALIMENTO,
-    OUTRO
+    OUTRO;
+    public static boolean isValidEnum(String value) {
+        try {
+            Category.valueOf(value.toUpperCase());
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 }
