@@ -3,6 +3,9 @@ package com.example.retornosAPI.services;
 import com.example.retornosAPI.models.Product;
 import com.example.retornosAPI.models.ProductEntity;
 import com.example.retornosAPI.repositories.ProductRepository;
+import com.example.retornosAPI.models.Category;
+import com.example.retornosAPI.utills.ProductMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
