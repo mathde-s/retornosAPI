@@ -1,11 +1,13 @@
 package com.example.retornosAPI.services;
 
+import com.example.retornosAPI.exceptions.EmptyArgumentException;
+import com.example.retornosAPI.exceptions.InvalidArgumentException;
+import com.example.retornosAPI.exceptions.ResourceNotFoundException;
 import com.example.retornosAPI.models.Product;
 import com.example.retornosAPI.models.ProductEntity;
 import com.example.retornosAPI.repositories.ProductRepository;
 import com.example.retornosAPI.models.Category;
 import com.example.retornosAPI.utills.ProductMapper;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +30,7 @@ public class ProductService {
 
     public Product getProductById(Long id) {
         ProductEntity entity = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
         return ProductMapper.toDTO(entity);
     }
 
@@ -40,7 +42,7 @@ public class ProductService {
 
     public void deleteProduct(Long id) {
         if (!repository.existsById(id)) {
-            throw new RuntimeException("Produto não encontrado.");
+            throw new ResourceNotFoundException("Produto não encontrado.");
         }
         repository.deleteById(id);
     }
@@ -48,7 +50,7 @@ public class ProductService {
     // Atualizar um produto existente
     public Product updateProduct(Long id, Product updatedProduct) {
         ProductEntity existingEntity = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("produto com ID " + id + " não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("produto com ID " + id + " não encontrado"));
 
         validateAndUpdateEntity(existingEntity, updatedProduct);
         existingEntity.setName(updatedProduct.name());
@@ -62,7 +64,7 @@ public class ProductService {
     // Buscar produtos pelo nome
     public List<Product> getProductsByName(String name) {
         if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("O nome do produto não pode ser vazio.");
+            throw new EmptyArgumentException("O nome do produto não pode ser vazio.");
         }
 
         List<ProductEntity> entities = repository.findByNameContainingIgnoreCase(name);
@@ -78,15 +80,15 @@ public class ProductService {
 
     private void validateAndUpdateEntity(ProductEntity existingEntity, Product updatedProduct) {
         if (!Category.isValidEnum(updatedProduct.category().name())) {
-            throw new IllegalArgumentException("a categoria não é válida");
+            throw new InvalidArgumentException("a categoria não é válida");
         }
 
         if (updatedProduct.price() < 0) {
-            throw new IllegalArgumentException("o preço não pode ser menor que zero.");
+            throw new InvalidArgumentException("o preço não pode ser menor que zero.");
         }
 
-        if (updatedProduct.name().length() < 3 || updatedProduct.name().length() < 100) {
-            throw new IllegalArgumentException("o nome deve conter entre 3 e 100 caracteres");
+        if (updatedProduct.name().length() < 3 || updatedProduct.name().length() > 100) {
+            throw new InvalidArgumentException("o nome deve conter entre 3 e 100 caracteres");
         }
     }
 }
