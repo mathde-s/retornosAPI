@@ -40,14 +40,6 @@ public class ProductEntity {
         this.quantity = quantity;
     }
 
-    public ProductEntity(Long id, String name, Double price, Category category, int quantity) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.category = category;
-        this.quantity = quantity;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
