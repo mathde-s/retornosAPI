@@ -52,11 +52,7 @@ public class ProductService {
         ProductEntity existingEntity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("produto com ID " + id + " não encontrado"));
 
-        validateAndUpdateEntity(existingEntity, updatedProduct);
-        existingEntity.setName(updatedProduct.name());
-        existingEntity.setPrice(updatedProduct.price());
-        existingEntity.setCategory(updatedProduct.category());
-
+        validaEAtualizaProduto(existingEntity, updatedProduct);
         ProductEntity savedEntity = repository.save(existingEntity);
         return ProductMapper.toDTO(savedEntity);
     }
@@ -78,17 +74,29 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    private void validateAndUpdateEntity(ProductEntity existingEntity, Product updatedProduct) {
-        if (!Category.isValidEnum(updatedProduct.category().name())) {
+    private void validaEAtualizaProduto(ProductEntity existingEntity, Product updatedProduct) {
+        if (!Category.isValidEnum(updatedProduct.category().name().toUpperCase())) {
             throw new InvalidArgumentException("a categoria não é válida");
         }
+        existingEntity.setCategory(updatedProduct.category());
 
         if (updatedProduct.price() < 0) {
             throw new InvalidArgumentException("o preço não pode ser menor que zero.");
         }
+        existingEntity.setPrice(updatedProduct.price());
 
         if (updatedProduct.name().length() < 3 || updatedProduct.name().length() > 100) {
             throw new InvalidArgumentException("o nome deve conter entre 3 e 100 caracteres");
         }
+        existingEntity.setName(updatedProduct.name());
+
+        if (updatedProduct.description().length() < 500)
+            throw new InvalidArgumentException("a descrição deve conter no máximo 500 caracteres");
+        existingEntity.setDescription(updatedProduct.description());
+
+        if (updatedProduct.quantity() < 0)
+            throw new InvalidArgumentException("a quantidade não pode ser menor que zero");
+        existingEntity.setQuantity(updatedProduct.quantity());
+
     }
 }
