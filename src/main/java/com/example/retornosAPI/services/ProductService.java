@@ -59,16 +59,13 @@ public class ProductService {
 
     // Buscar produtos pelo nome
     public List<Product> getProductsByName(String name) {
-        if (name == null || name.isEmpty()) {
+        if (name == null || name.isEmpty())
             throw new EmptyArgumentException("O nome do produto não pode ser vazio.");
-        }
 
         List<ProductEntity> entities = repository.findByNameContainingIgnoreCase(name);
-        if (entities.isEmpty()) {
-            System.out.println("Nenhum produto encontrado com o nome: " + name);
-        } else {
-            System.out.println("Produtos encontrados com o nome '" + name + "': " + entities.size());
-        }
+        if (entities.isEmpty())
+            throw new EmptyArgumentException("não existem produtos com esse nome");
+
         return entities.stream()
                 .map(ProductMapper::toDTO)
                 .collect(Collectors.toList());
