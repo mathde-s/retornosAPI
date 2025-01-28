@@ -23,7 +23,7 @@ public class ProductController {
         return ResponseEntity.ok(service.createProduct(product));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getProductById(id));
     }
@@ -43,7 +43,7 @@ public class ProductController {
         return service.updateProduct(id, updatedProduct);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<List<Product>> getProductByName(@PathVariable String name) {
         return ResponseEntity.ok(service.getProductsByName(name));
     }
