@@ -23,6 +23,9 @@ public class ProductService {
     }
 
     public Product createProduct(Product product) {
+        if (product == null) {
+            throw new InvalidArgumentException("O produto não pode ser nulo.");
+        }
         ProductEntity entity = ProductMapper.toEntity(product);
         ProductEntity savedEntity = repository.save(entity);
         return ProductMapper.toDTO(savedEntity);
