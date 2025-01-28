@@ -87,7 +87,7 @@ public class ProductService {
         }
         existingEntity.setName(updatedProduct.name());
 
-        if (updatedProduct.description().length() < 500)
+        if (updatedProduct.description().length() > 500)
             throw new InvalidArgumentException("a descrição deve conter no máximo 500 caracteres");
         existingEntity.setDescription(updatedProduct.description());
 
