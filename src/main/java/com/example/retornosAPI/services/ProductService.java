@@ -33,7 +33,7 @@ public class ProductService {
 
     public Product getProductById(Long id) {
         ProductEntity entity = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado"));
         return ProductMapper.toDTO(entity);
     }
 
@@ -55,7 +55,7 @@ public class ProductService {
         ProductEntity existingEntity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("produto com ID " + id + " não encontrado"));
 
-        validaEAtualizaProduto(existingEntity, updatedProduct);
+        validateAndUpdateProduct(existingEntity, updatedProduct);
         ProductEntity savedEntity = repository.save(existingEntity);
         return ProductMapper.toDTO(savedEntity);
     }
@@ -74,7 +74,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    private void validaEAtualizaProduto(ProductEntity existingEntity, Product updatedProduct) {
+    private void validateAndUpdateProduct(ProductEntity existingEntity, Product updatedProduct) {
         if (!Category.isValidEnum(updatedProduct.category().name().toUpperCase())) {
             throw new InvalidArgumentException("a categoria não é válida");
         }
