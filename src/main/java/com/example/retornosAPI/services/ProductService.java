@@ -67,7 +67,7 @@ public class ProductService {
 
         List<ProductEntity> entities = repository.findByNameContainingIgnoreCase(name);
         if (entities.isEmpty())
-            throw new EmptyArgumentException("não existem produtos com esse nome");
+            throw new ResourceNotFoundException("não existem produtos com esse nome");
 
         return entities.stream()
                 .map(ProductMapper::toDTO)
