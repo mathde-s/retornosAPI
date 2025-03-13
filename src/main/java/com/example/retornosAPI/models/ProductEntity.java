@@ -1,9 +1,7 @@
 package com.example.retornosAPI.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class ProductEntity {
@@ -11,16 +9,36 @@ public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "O nome não pode ser vazio ou nulo.")
+    @Size(min=3, max=100)
     private String name;
+
+    @Size(min=1, max=500,message = "a descrição não pode ter mais de 500 caracteres")
+    private String description;
+
+    @NotNull(message = "O preço não pode ser nulo.")
+    @Positive(message = "O preço deve ser maior que zero.")
     private Double price;
+
+    @NotNull(message = "a categoria não pode ser nula")
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
+    @NotNull(message = "A quantidade em estoque é obrigatória.")
+    @Min(value = 0, message = "A quantidade deve ser igual ou maior que zero.")
+    private int quantity;
 
     public ProductEntity() {
     }
 
-    public ProductEntity(Long id, String name, Double price) {
+    public ProductEntity(Long id, String name, String description, Double price, Category category, int quantity) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.price = price;
+        this.category = category;
+        this.quantity = quantity;
     }
 
     public void setId(Long id) {
@@ -47,5 +65,27 @@ public class ProductEntity {
         return price;
     }
 
+    public String getDescription() {
+        return description;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }
